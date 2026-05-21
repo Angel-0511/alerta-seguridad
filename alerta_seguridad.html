@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alerta de Seguridad — REIS</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,sans-serif;background:#f4f4f4;padding:1rem;min-height:100vh}
+.header{background:#CC2222;padding:1rem 1.25rem;display:flex;align-items:center;justify-content:space-between;border-radius:12px 12px 0 0}
+.header h1{color:#fff;font-size:17px;font-weight:500}
+.logo{color:#fff;font-size:13px;font-weight:500;border:1.5px solid rgba(255,255,255,0.7);padding:3px 10px;border-radius:8px}
+.wrap{background:#fff;border:0.5px solid #ddd;border-top:none;border-radius:0 0 12px 12px;overflow:hidden;max-width:480px;margin:0 auto}
+.card{max-width:480px;margin:0 auto}
+.section-label{font-size:11px;font-weight:500;color:#888;text-transform:uppercase;letter-spacing:0.8px;padding:0.75rem 1rem 0.25rem}
+.field{padding:0.5rem 1rem}
+.field label{display:block;font-size:12px;color:#666;margin-bottom:4px}
+.field input,.field textarea,.field select{width:100%;font-size:14px;padding:8px 10px;border:0.5px solid #ccc;border-radius:8px;background:#fff;color:#1a1a1a;resize:none;font-family:inherit}
+.field textarea{min-height:72px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:0 0.5rem;padding:0.5rem 1rem}
+.row2 .field{padding:0}
+.divider{height:0.5px;background:#eee;margin:0.5rem 1rem}
+.photo-section{padding:0.75rem 1rem}
+.photo-label{font-size:12px;color:#666;margin-bottom:8px}
+.photo-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.photo-box{border:0.5px dashed #ccc;border-radius:8px;aspect-ratio:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;cursor:pointer;position:relative;overflow:hidden;background:#f9f9f9}
+.photo-box input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.photo-box i{font-size:24px;color:#aaa}
+.photo-box span{font-size:11px;color:#aaa;text-align:center;padding:0 8px}
+.photo-box img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.photo-box .remove-btn{position:absolute;top:4px;right:4px;background:rgba(0,0,0,0.55);border:none;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:2}
+.photo-box .remove-btn i{font-size:13px;color:#fff}
+.estatus-row{display:flex;gap:8px;padding:4px 0 0}
+.est-btn{flex:1;padding:8px 4px;border:0.5px solid #ccc;border-radius:8px;font-size:12px;cursor:pointer;background:#f5f5f5;color:#666;text-align:center;transition:all 0.15s;font-family:inherit}
+.est-btn.active-activo{background:#E6F1FB;border-color:#378ADD;color:#0C447C}
+.est-btn.active-incapacitado{background:#FCEBEB;border-color:#E24B4A;color:#A32D2D}
+.est-btn.active-alta{background:#EAF3DE;border-color:#639922;color:#3B6D11}
+.btn-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:1rem}
+.submit-btn{padding:13px;background:#CC2222;color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:500;cursor:pointer;font-family:inherit}
+.pdf-btn{padding:13px;background:#f5f5f5;color:#1a1a1a;border:0.5px solid #ccc;border-radius:8px;font-size:14px;font-weight:500;cursor:pointer;font-family:inherit}
+.submit-btn:active,.pdf-btn:active{opacity:0.8}
+.success-msg{display:none;margin:0 1rem 1rem;padding:1rem;background:#EAF3DE;border:0.5px solid #639922;border-radius:8px;color:#3B6D11;font-size:14px;text-align:center}
+.toast{display:none;position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#333;color:#fff;padding:10px 18px;border-radius:8px;font-size:13px;z-index:99;white-space:nowrap}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="header">
+    <h1><i class="ti ti-alert-triangle" style="font-size:18px;vertical-align:-2px;margin-right:6px"></i>Alerta de seguridad</h1>
+    <span class="logo">REIS</span>
+  </div>
+  <div class="wrap">
+    <div class="section-label">Información del incidente</div>
+    <div class="field">
+      <label>¿Quién? — Nombre del afectado</label>
+      <input type="text" id="quien" placeholder="Nombre completo">
+    </div>
+    <div class="field">
+      <label>¿Qué pasó?</label>
+      <textarea id="que" placeholder="Describe la lesión o incidente..."></textarea>
+    </div>
+    <div class="field">
+      <label>¿Dónde? — Área / ubicación</label>
+      <input type="text" id="donde" placeholder="Ej: Rack 22 área de SM">
+    </div>
+    <div class="row2">
+      <div class="field">
+        <label>Empleados impactados</label>
+        <input type="number" id="impactados" placeholder="0" min="0">
+      </div>
+      <div class="field">
+        <label>¿Cuándo?</label>
+        <input type="date" id="cuando">
+      </div>
+    </div>
+    <div class="field">
+      <label>Estatus del personal</label>
+      <div class="estatus-row">
+        <div class="est-btn" onclick="setEstatus(this,'Activo','active-activo')">Activo</div>
+        <div class="est-btn" onclick="setEstatus(this,'Incapacitado','active-incapacitado')">Incapacitado</div>
+        <div class="est-btn" onclick="setEstatus(this,'Alta médica','active-alta')">Alta médica</div>
+      </div>
+      <input type="hidden" id="estatus" value="">
+    </div>
+    <div class="field">
+      <label>¿Cómo ocurrió?</label>
+      <textarea id="como" placeholder="Describe detalladamente cómo sucedió el incidente..." style="min-height:88px"></textarea>
+    </div>
+    <div class="divider"></div>
+    <div class="section-label">Ayuda visual</div>
+    <div class="photo-section">
+      <div class="photo-label">Del evento (hasta 2 fotos)</div>
+      <div class="photo-grid">
+        <div class="photo-box" id="box-e1">
+          <input type="file" accept="image/*" capture="environment" onchange="loadPhoto(this,'box-e1')">
+          <i class="ti ti-camera"></i><span>Foto del evento</span>
+        </div>
+        <div class="photo-box" id="box-e2">
+          <input type="file" accept="image/*" capture="environment" onchange="loadPhoto(this,'box-e2')">
+          <i class="ti ti-camera"></i><span>Foto del evento</span>
+        </div>
+      </div>
+    </div>
+    <div class="photo-section" style="padding-top:0">
+      <div class="photo-label">Equipo / máquina (hasta 2 fotos)</div>
+      <div class="photo-grid">
+        <div class="photo-box" id="box-m1">
+          <input type="file" accept="image/*" capture="environment" onchange="loadPhoto(this,'box-m1')">
+          <i class="ti ti-tool"></i><span>Foto del equipo</span>
+        </div>
+        <div class="photo-box" id="box-m2">
+          <input type="file" accept="image/*" capture="environment" onchange="loadPhoto(this,'box-m2')">
+          <i class="ti ti-tool"></i><span>Foto del equipo</span>
+        </div>
+      </div>
+    </div>
+    <div class="divider"></div>
+    <div class="section-label">Cierre</div>
+    <div class="field">
+      <label>Acciones de contención</label>
+      <textarea id="accion" placeholder="Lista las acciones tomadas..." style="min-height:88px"></textarea>
+    </div>
+    <div class="row2">
+      <div class="field">
+        <label>Fecha de caducidad</label>
+        <input type="date" id="caducidad">
+      </div>
+      <div class="field">
+        <label>N° de control</label>
+        <input type="text" id="control" placeholder="Ej: SA-2026-001">
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="submit-btn" onclick="guardar()">
+        <i class="ti ti-file-check" style="vertical-align:-2px;margin-right:4px"></i>Guardar
+      </button>
+      <button class="pdf-btn" onclick="exportarPDF()">
+        <i class="ti ti-file-type-pdf" style="vertical-align:-2px;margin-right:4px"></i>Exportar PDF
+      </button>
+    </div>
+    <div class="success-msg" id="ok">
+      <i class="ti ti-circle-check" style="font-size:22px;display:block;margin-bottom:6px"></i>
+      ¡Alerta registrada correctamente!
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+const photos={e1:null,e2:null,m1:null,m2:null};
+function setEstatus(el,val,cls){
+  document.querySelectorAll('.est-btn').forEach(b=>b.className='est-btn');
+  el.classList.add(cls);
+  document.getElementById('estatus').value=val;
+}
+function loadPhoto(input,boxId){
+  const file=input.files[0];if(!file)return;
+  const box=document.getElementById(boxId);
+  const reader=new FileReader();
+  reader.onload=e=>{
+    const key=boxId.replace('box-','');
+    photos[key]=e.target.result;
+    box.querySelectorAll('i,span').forEach(el=>el.style.display='none');
+    let img=box.querySelector('img');
+    if(!img){img=document.createElement('img');box.appendChild(img);}
+    img.src=e.target.result;
+    let btn=box.querySelector('.remove-btn');
+    if(!btn){
+      btn=document.createElement('button');btn.className='remove-btn';
+      btn.innerHTML='<i class="ti ti-x"></i>';
+      btn.onclick=ev=>{ev.stopPropagation();removePhoto(boxId);};
+      box.appendChild(btn);
+    }
+  };
+  reader.readAsDataURL(file);
+}
+function removePhoto(boxId){
+  const key=boxId.replace('box-','');photos[key]=null;
+  const box=document.getElementById(boxId);
+  const img=box.querySelector('img');if(img)img.remove();
+  const btn=box.querySelector('.remove-btn');if(btn)btn.remove();
+  box.querySelectorAll('i,span').forEach(el=>el.style.display='');
+  box.querySelector('input').value='';
+}
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.style.display='block';
+  setTimeout(()=>t.style.display='none',2800);
+}
+function validate(){
+  const req=['quien','que','donde','cuando','como','accion'];
+  let ok=true;
+  req.forEach(id=>{
+    const el=document.getElementById(id);
+    if(!el.value.trim()){el.style.borderColor='#E24B4A';ok=false;}
+    else el.style.borderColor='';
+  });
+  return ok;
+}
+function guardar(){
+  if(!validate()){showToast('Completa los campos obligatorios');return;}
+  document.getElementById('ok').style.display='block';
+  setTimeout(()=>document.getElementById('ok').style.display='none',3500);
+}
+function val(id){return document.getElementById(id).value.trim();}
+function wrapText(doc,text,x,y,maxW,lineH){
+  const lines=doc.splitTextToSize(text,maxW);
+  doc.text(lines,x,y);
+  return y+lines.length*lineH;
+}
+function exportarPDF(){
+  if(!validate()){showToast('Completa los campos obligatorios');return;}
+  showToast('Generando PDF...');
+  const {jsPDF}=window.jspdf;
+  const doc=new jsPDF({unit:'mm',format:'a4'});
+  const W=210,M=14,cW=W-M*2,lh=6;
+  doc.setFillColor(204,34,34);
+  doc.rect(0,0,W,22,'F');
+  doc.setTextColor(255,255,255);
+  doc.setFontSize(16);doc.setFont('helvetica','bold');
+  doc.text('Alerta de seguridad',M,14);
+  doc.setFontSize(11);doc.setFont('helvetica','normal');
+  doc.text('REIS',W-M,14,{align:'right'});
+  doc.setTextColor(30,30,30);
+  let y=32;
+  const campos=[
+    ['¿Quién?',val('quien')],
+    ['¿Qué?',val('que')],
+    ['¿Dónde?',val('donde')],
+    ['¿Cuándo?',val('cuando')],
+    ['Empleados impactados',val('impactados')||'—'],
+    ['Estatus del personal',val('estatus')||'—'],
+  ];
+  campos.forEach(([label,valor])=>{
+    doc.setFillColor(245,245,245);
+    doc.rect(M,y-4,36,8,'F');
+    doc.setFontSize(9);doc.setFont('helvetica','bold');doc.setTextColor(80,80,80);
+    doc.text(label+':',M+1,y);
+    doc.setFont('helvetica','normal');doc.setTextColor(30,30,30);
+    const lines=doc.splitTextToSize(valor||'—',cW-38);
+    doc.text(lines,M+38,y);
+    y+=Math.max(8,lines.length*lh);
+  });
+  y+=2;
+  doc.setFillColor(245,245,245);
+  doc.rect(M,y-4,cW,7,'F');
+  doc.setFontSize(9);doc.setFont('helvetica','bold');doc.setTextColor(80,80,80);
+  doc.text('¿Cómo?',M+1,y);y+=5;
+  doc.setFont('helvetica','normal');doc.setTextColor(30,30,30);
+  y=wrapText(doc,val('como')||'—',M,y,cW,lh)+4;
+  const fotoKeys=[['e1','e2'],['m1','m2']];
+  const fotoLabels=['Ayuda visual — Del evento','Ayuda visual — Equipo / máquina'];
+  fotoKeys.forEach((pair,idx)=>{
+    const hasAny=photos[pair[0]]||photos[pair[1]];
+    if(!hasAny)return;
+    if(y>240){doc.addPage();y=20;}
+    doc.setFillColor(204,34,34);
+    doc.rect(M,y-4,cW,7,'F');
+    doc.setFontSize(9);doc.setFont('helvetica','bold');doc.setTextColor(255,255,255);
+    doc.text(fotoLabels[idx],M+2,y);y+=6;
+    let x=M;
+    pair.forEach(key=>{
+      if(photos[key]){try{doc.addImage(photos[key],'JPEG',x,y,45,38);}catch(e){}x+=48;}
+    });
+    y+=42;
+  });
+  if(y>250){doc.addPage();y=20;}
+  doc.setFillColor(245,245,245);
+  doc.rect(M,y-4,cW,7,'F');
+  doc.setFontSize(9);doc.setFont('helvetica','bold');doc.setTextColor(80,80,80);
+  doc.text('Acciones de contención',M+1,y);y+=5;
+  doc.setFont('helvetica','normal');doc.setTextColor(30,30,30);
+  y=wrapText(doc,val('accion')||'—',M,y,cW,lh)+4;
+  if(y>265){doc.addPage();y=20;}
+  doc.setDrawColor(200,200,200);doc.line(M,y,W-M,y);y+=6;
+  doc.setFontSize(8);doc.setTextColor(120,120,120);
+  doc.text('Fecha de caducidad: '+(val('caducidad')||'—'),M,y);
+  doc.text('N° de control: '+(val('control')||'—'),W-M,y,{align:'right'});
+  const nombre=val('quien').replace(/\s+/g,'_')||'alerta';
+  doc.save('alerta_seguridad_'+nombre+'.pdf');
+}
+document.getElementById('cuando').valueAsDate=new Date();
+</script>
+</body>
+</html>
