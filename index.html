@@ -155,7 +155,7 @@ body{font-family:system-ui,sans-serif;background:#f0f2f5;padding:1rem;min-height
         </div>
         <div class="field">
           <label>N° de control</label>
-          <input type="text" id="control" placeholder="SA-2026-001">
+          <input type="text" id="control" placeholder="Se genera al guardar" readonly style="background:#f0f0f0;color:#888;cursor:not-allowed">
         </div>
       </div>
     </div>
@@ -302,6 +302,16 @@ function exportarPDF(){
   doc.save('alerta_seguridad_'+nombre+'.pdf');
 }
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzGnmQ5fABp-LcIoSU3sKJVBv4jhwm9t7F430jpDyr_1rrur09rZgSeGgxdUObXHZRQ/exec';
+function generarIdPreview(){
+  const hoy = new Date();
+  const y = hoy.getFullYear();
+  const m = String(hoy.getMonth()+1).padStart(2,'0');
+  const d = String(hoy.getDate()).padStart(2,'0');
+  const h = String(hoy.getHours()).padStart(2,'0');
+  const min = String(hoy.getMinutes()).padStart(2,'0');
+  document.getElementById('control').value = `AS-${y}/${m}/${d}-${h}:${min}-001`;
+}
+generarIdPreview();
 document.getElementById('cuando').valueAsDate=new Date();
 </script>
 </body>
