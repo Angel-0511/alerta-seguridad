@@ -237,13 +237,19 @@ function guardar(){
     como: val('como'), accion: val('accion')
   };
   fetch(SCRIPT_URL, {
-    method:'POST', mode:'no-cors',
-    headers:{'Content-Type':'application/json'},
+    method:'POST',
+    headers:{'Content-Type':'text/plain'},
     body: JSON.stringify(body)
-  }).then(()=>{
-    document.getElementById('ok').style.display='block';
-    setTimeout(()=>document.getElementById('ok').style.display='none',3500);
-  }).catch(()=>showToast('Error al guardar'));
+  }).then(r=>r.json()).then(data=>{
+    if(data.success){
+      document.getElementById('control').value = data.id;
+      document.getElementById('ok').style.display='block';
+      setTimeout(()=>document.getElementById('ok').style.display='none',3500);
+    }
+  }).catch(err=>{
+    showToast('Error: '+err.message);
+    console.error(err);
+  });
 }
 function val(id){return document.getElementById(id).value.trim();}
 function wrapText(doc,text,x,y,maxW,lineH){
