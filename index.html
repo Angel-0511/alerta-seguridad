@@ -229,8 +229,21 @@ function validate(){
 }
 function guardar(){
   if(!validate()){showToast('Completa los campos obligatorios');return;}
-  document.getElementById('ok').style.display='block';
-  setTimeout(()=>document.getElementById('ok').style.display='none',3500);
+  showToast('Guardando...');
+  const body = {
+    quien: val('quien'), que: val('que'),
+    donde: val('donde'), cuando: val('cuando'),
+    impactados: val('impactados'), estatus: val('estatus'),
+    como: val('como'), accion: val('accion')
+  };
+  fetch(SCRIPT_URL, {
+    method:'POST', mode:'no-cors',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify(body)
+  }).then(()=>{
+    document.getElementById('ok').style.display='block';
+    setTimeout(()=>document.getElementById('ok').style.display='none',3500);
+  }).catch(()=>showToast('Error al guardar'));
 }
 function val(id){return document.getElementById(id).value.trim();}
 function wrapText(doc,text,x,y,maxW,lineH){
@@ -282,6 +295,7 @@ function exportarPDF(){
   const nombre=val('quien').replace(/\s+/g,'_')||'alerta';
   doc.save('alerta_seguridad_'+nombre+'.pdf');
 }
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzGnmQ5fABp-LcIoSU3sKJVBv4jhwm9t7F430jpDyr_1rrur09rZgSeGgxdUObXHZRQ/exec';
 document.getElementById('cuando').valueAsDate=new Date();
 </script>
 </body>
