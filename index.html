@@ -1,241 +1,577 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Alerta de Seguridad — REIS</title>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
-<link rel="icon" type="image/png" href="CirculoREIS.png">
-<style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:system-ui,sans-serif;background:#0f1117;padding:1rem;min-height:100vh}
-.page{max-width:480px;margin:0 auto}
-.hero{background:#161b27;border:0.5px solid #2a2f3d;border-radius:20px;padding:1.25rem;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between}
-.hero-left{display:flex;flex-direction:column;gap:4px}
-.hero-title{color:#e24b4a;font-size:22px;font-weight:500;letter-spacing:-0.3px}
-.hero-sub{color:#6b7280;font-size:12px}
-.hero-logo{height:36px;opacity:0.9}
-.card{background:#161b27;border:0.5px solid #2a2f3d;border-radius:20px;margin-bottom:12px;overflow:hidden}
-.card-header{display:flex;align-items:center;gap:10px;padding:1rem 1rem 0.75rem;border-bottom:0.5px solid #2a2f3d}
-.card-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
-.ci-red{background:#2d1515;color:#e24b4a}
-.ci-blue{background:#0c1e2e;color:#378add}
-.ci-green{background:#0f1f0a;color:#639922}
-.card-title{font-size:13px;font-weight:500;color:#e5e7eb}
-.card-sub{font-size:11px;color:#6b7280;margin-top:1px}
-.card-body{padding:1rem}
-.field{margin-bottom:12px}
-.field:last-child{margin-bottom:0}
-.field label{display:block;font-size:11px;font-weight:500;color:#6b7280;text-transform:uppercase;letter-spacing:0.7px;margin-bottom:5px}
-.field input,.field textarea{width:100%;font-size:14px;padding:10px 12px;border:0.5px solid #2a2f3d;border-radius:10px;background:#0f1117;color:#e5e7eb;resize:none;font-family:inherit;transition:border-color 0.15s}
-.field input:focus,.field textarea:focus{outline:none;border-color:#e24b4a}
-.field textarea{min-height:76px}
-.field input[readonly]{background:#1a1f2b;color:#6b7280;cursor:not-allowed}
-.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.estatus-wrap{display:flex;gap:6px}
-.est-btn{flex:1;padding:9px 4px;border:0.5px solid #2a2f3d;border-radius:10px;font-size:11px;font-weight:500;cursor:pointer;background:#0f1117;color:#6b7280;text-align:center;transition:all 0.15s;font-family:inherit}
-.est-btn.active-activo{background:#0c1e2e;border-color:#378add;color:#85b7eb}
-.est-btn.active-incapacitado{background:#2d1515;border-color:#e24b4a;color:#f09595}
-.est-btn.active-alta{background:#0f1f0a;border-color:#639922;color:#97c459}
-.photo-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.photo-box{border:0.5px dashed #2a2f3d;border-radius:12px;aspect-ratio:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;cursor:pointer;position:relative;overflow:hidden;background:#0f1117;transition:border-color 0.15s}
-.photo-box:hover{border-color:#e24b4a}
-.photo-box input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
-.photo-box i{font-size:26px;color:#374151}
-.photo-box span{font-size:11px;color:#374151;text-align:center;padding:0 8px;font-weight:500}
-.photo-box img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.photo-box .remove-btn{position:absolute;top:6px;right:6px;background:rgba(0,0,0,0.7);border:none;border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:2}
-.photo-box .remove-btn i{font-size:13px;color:#e5e7eb}
-.photo-sublabel{font-size:11px;font-weight:500;color:#6b7280;text-transform:uppercase;letter-spacing:0.7px;margin-bottom:8px}
-.divider{height:0.5px;background:#2a2f3d;margin:12px 0}
-.btn-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:1rem}
-.btn-save{padding:14px;background:#e24b4a;color:#fff;border:none;border-radius:12px;font-size:14px;font-weight:500;cursor:pointer;font-family:inherit}
-.btn-pdf{padding:14px;background:#161b27;color:#e5e7eb;border:0.5px solid #2a2f3d;border-radius:12px;font-size:14px;font-weight:500;cursor:pointer;font-family:inherit}
-.btn-save:active,.btn-pdf:active{opacity:0.85;transform:scale(0.98)}
-.success-card{display:none;margin-bottom:12px;background:#0f1f0a;border:0.5px solid #639922;border-radius:16px;padding:1rem;text-align:center;color:#97c459;font-size:14px;font-weight:500}
-.toast{display:none;position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#e5e7eb;color:#0f1117;padding:10px 20px;border-radius:12px;font-size:13px;z-index:99;white-space:nowrap}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Alerta de Seguridad — REIS</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
+  <link rel="icon" type="image/png" href="CirculoREIS.png">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0
+    }
+
+    body {
+      font-family: system-ui, sans-serif;
+      background: #0f1117;
+      padding: 1rem;
+      min-height: 100vh
+    }
+
+    .page {
+      max-width: 480px;
+      margin: 0 auto
+    }
+
+    .hero {
+      background: #161b27;
+      border: 0.5px solid #2a2f3d;
+      border-radius: 20px;
+      padding: 1.25rem;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between
+    }
+
+    .hero-left {
+      display: flex;
+      flex-direction: column;
+      gap: 4px
+    }
+
+    .hero-title {
+      color: #e24b4a;
+      font-size: 22px;
+      font-weight: 500;
+      letter-spacing: -0.3px
+    }
+
+    .hero-sub {
+      color: #6b7280;
+      font-size: 12px
+    }
+
+    .hero-logo {
+      height: 36px;
+      opacity: 0.9
+    }
+
+    .card {
+      background: #161b27;
+      border: 0.5px solid #2a2f3d;
+      border-radius: 20px;
+      margin-bottom: 12px;
+      overflow: hidden
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 1rem 1rem 0.75rem;
+      border-bottom: 0.5px solid #2a2f3d
+    }
+
+    .card-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0
+    }
+
+    .ci-red {
+      background: #2d1515;
+      color: #e24b4a
+    }
+
+    .ci-blue {
+      background: #0c1e2e;
+      color: #378add
+    }
+
+    .ci-green {
+      background: #0f1f0a;
+      color: #639922
+    }
+
+    .card-title {
+      font-size: 13px;
+      font-weight: 500;
+      color: #e5e7eb
+    }
+
+    .card-sub {
+      font-size: 11px;
+      color: #6b7280;
+      margin-top: 1px
+    }
+
+    .card-body {
+      padding: 1rem
+    }
+
+    .field {
+      margin-bottom: 12px
+    }
+
+    .field:last-child {
+      margin-bottom: 0
+    }
+
+    .field label {
+      display: block;
+      font-size: 11px;
+      font-weight: 500;
+      color: #6b7280;
+      text-transform: uppercase;
+      letter-spacing: 0.7px;
+      margin-bottom: 5px
+    }
+
+    .field input,
+    .field textarea {
+      width: 100%;
+      font-size: 14px;
+      padding: 10px 12px;
+      border: 0.5px solid #2a2f3d;
+      border-radius: 10px;
+      background: #0f1117;
+      color: #e5e7eb;
+      resize: none;
+      font-family: inherit;
+      transition: border-color 0.15s
+    }
+
+    .field input:focus,
+    .field textarea:focus {
+      outline: none;
+      border-color: #e24b4a
+    }
+
+    .field textarea {
+      min-height: 76px
+    }
+
+    .field input[readonly] {
+      background: #1a1f2b;
+      color: #6b7280;
+      cursor: not-allowed
+    }
+
+    .row2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px
+    }
+
+    .estatus-wrap {
+      display: flex;
+      gap: 6px
+    }
+
+    .est-btn {
+      flex: 1;
+      padding: 9px 4px;
+      border: 0.5px solid #2a2f3d;
+      border-radius: 10px;
+      font-size: 11px;
+      font-weight: 500;
+      cursor: pointer;
+      background: #0f1117;
+      color: #6b7280;
+      text-align: center;
+      transition: all 0.15s;
+      font-family: inherit
+    }
+
+    .est-btn.active-activo {
+      background: #0c1e2e;
+      border-color: #378add;
+      color: #85b7eb
+    }
+
+    .est-btn.active-incapacitado {
+      background: #2d1515;
+      border-color: #e24b4a;
+      color: #f09595
+    }
+
+    .est-btn.active-alta {
+      background: #0f1f0a;
+      border-color: #639922;
+      color: #97c459
+    }
+
+    .photo-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px
+    }
+
+    .photo-box {
+      border: 0.5px dashed #2a2f3d;
+      border-radius: 12px;
+      aspect-ratio: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      background: #0f1117;
+      transition: border-color 0.15s
+    }
+
+    .photo-box:hover {
+      border-color: #e24b4a
+    }
+
+    .photo-box input[type=file] {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+      width: 100%;
+      height: 100%
+    }
+
+    .photo-box i {
+      font-size: 26px;
+      color: #374151
+    }
+
+    .photo-box span {
+      font-size: 11px;
+      color: #374151;
+      text-align: center;
+      padding: 0 8px;
+      font-weight: 500
+    }
+
+    .photo-box img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover
+    }
+
+    .photo-box .remove-btn {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      background: rgba(0, 0, 0, 0.7);
+      border: none;
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 2
+    }
+
+    .photo-box .remove-btn i {
+      font-size: 13px;
+      color: #e5e7eb
+    }
+
+    .photo-sublabel {
+      font-size: 11px;
+      font-weight: 500;
+      color: #6b7280;
+      text-transform: uppercase;
+      letter-spacing: 0.7px;
+      margin-bottom: 8px
+    }
+
+    .divider {
+      height: 0.5px;
+      background: #2a2f3d;
+      margin: 12px 0
+    }
+
+    .btn-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 1rem
+    }
+
+    .btn-save {
+      padding: 14px;
+      background: #e24b4a;
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      font-family: inherit
+    }
+
+    .btn-pdf {
+      padding: 14px;
+      background: #161b27;
+      color: #e5e7eb;
+      border: 0.5px solid #2a2f3d;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      font-family: inherit
+    }
+
+    .btn-save:active,
+    .btn-pdf:active {
+      opacity: 0.85;
+      transform: scale(0.98)
+    }
+
+    .success-card {
+      display: none;
+      margin-bottom: 12px;
+      background: #0f1f0a;
+      border: 0.5px solid #639922;
+      border-radius: 16px;
+      padding: 1rem;
+      text-align: center;
+      color: #97c459;
+      font-size: 14px;
+      font-weight: 500
+    }
+
+    .toast {
+      display: none;
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #e5e7eb;
+      color: #0f1117;
+      padding: 10px 20px;
+      border-radius: 12px;
+      font-size: 13px;
+      z-index: 99;
+      white-space: nowrap
+    }
+  </style>
 </head>
+
 <body>
-<div class="page">
-  <div class="hero">
-    <div class="hero-left">
-      <div class="hero-title"><i class="ti ti-shield-exclamation" style="font-size:20px;vertical-align:-3px;margin-right:6px"></i>Alerta de seguridad</div>
-      <div class="hero-sub">Registro de incidentes de seguridad</div>
-    </div>
-    <img src="LogoReis.png" class="hero-logo" alt="REIS">
-  </div>
-
-  <div class="card">
-    <div class="card-header">
-      <div class="card-icon ci-red"><i class="ti ti-user"></i></div>
-      <div><div class="card-title">Información del incidente</div><div class="card-sub">Datos básicos del evento</div></div>
-    </div>
-    <div class="card-body">
-      <div class="field"><label>¿Quién? — Nombre del afectado</label><input type="text" id="quien" placeholder="Nombre completo"></div>
-      <div class="field"><label>¿Qué pasó?</label><textarea id="que" placeholder="Describe la lesión o incidente..."></textarea></div>
-      <div class="field"><label>¿Dónde? — Área / ubicación</label><input type="text" id="donde" placeholder="Ej: Rack 22 área de SM"></div>
-      <div style="display:grid;grid-template-columns:3fr 2fr;gap:10px">
-        <div class="field"><label>Empleados impactados</label><input type="number" id="impactados" placeholder="0" min="0"></div>
-        <div class="field"><label>¿Cuándo?</label><input type="date" id="cuando"></div>
+  <div class="page">
+    <div class="hero">
+      <div class="hero-left">
+        <div class="hero-title"><i class="ti ti-shield-exclamation"
+            style="font-size:20px;vertical-align:-3px;margin-right:6px"></i>Alerta de seguridad</div>
+        <div class="hero-sub">Registro de incidentes de seguridad</div>
       </div>
-      <div class="field">
-        <label>Estatus del personal</label>
-        <div class="estatus-wrap">
-          <div class="est-btn" onclick="setEstatus(this,'Activo','active-activo')">Activo</div>
-          <div class="est-btn" onclick="setEstatus(this,'Incapacitado','active-incapacitado')">Incapacitado</div>
-          <div class="est-btn" onclick="setEstatus(this,'Alta médica','active-alta')">Alta médica</div>
+      <img src="LogoReis.png" class="hero-logo" alt="REIS">
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon ci-red"><i class="ti ti-user"></i></div>
+        <div>
+          <div class="card-title">Información del incidente</div>
+          <div class="card-sub">Datos básicos del evento</div>
         </div>
-        <input type="hidden" id="estatus" value="">
       </div>
-      <div class="field"><label>¿Cómo ocurrió?</label><textarea id="como" placeholder="Describe detalladamente cómo sucedió..." style="min-height:88px"></textarea></div>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="card-header">
-      <div class="card-icon ci-blue"><i class="ti ti-camera"></i></div>
-      <div><div class="card-title">Ayuda visual</div><div class="card-sub">Fotos del evento y equipo</div></div>
-    </div>
-    <div class="card-body">
-      <div class="photo-sublabel">Del evento</div>
-      <div class="photo-grid" style="margin-bottom:14px">
-        <div class="photo-box" id="box-e1"><input type="file" accept="image/*" capture="environment" onchange="loadPhoto(this,'box-e1')"><i class="ti ti-camera"></i><span>Tomar foto</span></div>
-        <div class="photo-box" id="box-e2"><input type="file" accept="image/*" capture="environment" onchange="loadPhoto(this,'box-e2')"><i class="ti ti-camera"></i><span>Tomar foto</span></div>
-      </div>
-      <div class="photo-sublabel">Equipo / máquina</div>
-      <div class="photo-grid">
-        <div class="photo-box" id="box-m1"><input type="file" accept="image/*" capture="environment" onchange="loadPhoto(this,'box-m1')"><i class="ti ti-tool"></i><span>Tomar foto</span></div>
-        <div class="photo-box" id="box-m2"><input type="file" accept="image/*" capture="environment" onchange="loadPhoto(this,'box-m2')"><i class="ti ti-tool"></i><span>Tomar foto</span></div>
-      </div>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="card-header">
-      <div class="card-icon ci-green"><i class="ti ti-clipboard-check"></i></div>
-      <div><div class="card-title">Cierre y contención</div><div class="card-sub">Acciones tomadas</div></div>
-    </div>
-    <div class="card-body">
-      <div class="field"><label>Acciones de contención</label><textarea id="accion" placeholder="Lista las acciones tomadas..." style="min-height:88px"></textarea></div>
-      <div class="divider"></div>
-      <div class="row2">
-        <div class="field"><label>Fecha de caducidad</label><input type="date" id="caducidad"></div>
-        <div class="field"><label>N° de control</label><input type="text" id="control" placeholder="Se genera al guardar" readonly></div>
+      <div class="card-body">
+        <div class="field"><label>¿Quién? — Nombre del afectado</label><input type="text" id="quien"
+            placeholder="Nombre completo"></div>
+        <div class="field"><label>¿Qué pasó?</label><textarea id="que"
+            placeholder="Describe la lesión o incidente..."></textarea></div>
+        <div class="field"><label>¿Dónde? — Área / ubicación</label><input type="text" id="donde"
+            placeholder="Ej: Rack 22 área de SM"></div>
+        <div style="display:grid;grid-template-columns:3fr 2fr;gap:10px">
+          <div class="field"><label>Empleados impactados</label><input type="number" id="impactados" placeholder="0"
+              min="0"></div>
+          <div class="field"><label>¿Cuándo?</label><input type="date" id="cuando"></div>
+        </div>
+        <div class="field">
+          <label>Estatus del personal</label>
+          <div class="estatus-wrap">
+            <div class="est-btn" onclick="setEstatus(this,'Activo','active-activo')">Activo</div>
+            <div class="est-btn" onclick="setEstatus(this,'Incapacitado','active-incapacitado')">Incapacitado</div>
+            <div class="est-btn" onclick="setEstatus(this,'Alta médica','active-alta')">Alta médica</div>
+          </div>
+          <input type="hidden" id="estatus" value="">
+        </div>
+        <div class="field"><label>¿Cómo ocurrió?</label><textarea id="como"
+            placeholder="Describe detalladamente cómo sucedió..." style="min-height:88px"></textarea></div>
       </div>
     </div>
-  </div>
 
-  <div class="success-card" id="ok">
-    <i class="ti ti-circle-check" style="font-size:24px;display:block;margin-bottom:6px"></i>
-    ¡Alerta registrada correctamente!
-  </div>
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon ci-blue"><i class="ti ti-camera"></i></div>
+        <div>
+          <div class="card-title">Ayuda visual</div>
+          <div class="card-sub">Fotos del evento y equipo</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="photo-sublabel">Del evento</div>
+        <div class="photo-grid" style="margin-bottom:14px">
+          <div class="photo-box" id="box-e1"><input type="file" accept="image/*" capture="environment"
+              onchange="loadPhoto(this,'box-e1')"><i class="ti ti-camera"></i><span>Tomar foto</span></div>
+          <div class="photo-box" id="box-e2"><input type="file" accept="image/*" capture="environment"
+              onchange="loadPhoto(this,'box-e2')"><i class="ti ti-camera"></i><span>Tomar foto</span></div>
+        </div>
+        <div class="photo-sublabel">Equipo / máquina</div>
+        <div class="photo-grid">
+          <div class="photo-box" id="box-m1"><input type="file" accept="image/*" capture="environment"
+              onchange="loadPhoto(this,'box-m1')"><i class="ti ti-tool"></i><span>Tomar foto</span></div>
+          <div class="photo-box" id="box-m2"><input type="file" accept="image/*" capture="environment"
+              onchange="loadPhoto(this,'box-m2')"><i class="ti ti-tool"></i><span>Tomar foto</span></div>
+        </div>
+      </div>
+    </div>
 
-  <div class="btn-row">
-    <button class="btn-save" onclick="guardar()"><i class="ti ti-device-floppy" style="vertical-align:-2px;margin-right:5px"></i>Guardar</button>
-    <button class="btn-pdf" onclick="exportarPDF()"><i class="ti ti-file-type-pdf" style="vertical-align:-2px;margin-right:5px"></i>Exportar PDF</button>
-  </div>
-</div>
-<div class="toast" id="toast"></div>
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon ci-green"><i class="ti ti-clipboard-check"></i></div>
+        <div>
+          <div class="card-title">Cierre y contención</div>
+          <div class="card-sub">Acciones tomadas</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="field"><label>Acciones de contención</label><textarea id="accion"
+            placeholder="Lista las acciones tomadas..." style="min-height:88px"></textarea></div>
+        <div class="divider"></div>
+        <div class="row2">
+          <div class="field"><label>Fecha de caducidad</label><input type="date" id="caducidad"></div>
+          <div class="field"><label>N° de control</label><input type="text" id="control"
+              placeholder="Se genera al guardar" readonly></div>
+        </div>
+      </div>
+    </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script>
-const SCRIPT_URL='https://script.google.com/macros/s/AKfycbzGnmQ5fABp-LcIoSU3sKJVBv4jhwm9t7F430jpDyr_1rrur09rZgSeGgxdUObXHZRQ/exec';
-const photos={e1:null,e2:null,m1:null,m2:null};
-function setEstatus(el,v,cls){document.querySelectorAll('.est-btn').forEach(b=>b.className='est-btn');el.classList.add(cls);document.getElementById('estatus').value=v;}
-function loadPhoto(input,boxId){
-  const file=input.files[0];if(!file)return;
-  const box=document.getElementById(boxId);
-  const reader=new FileReader();
-  reader.onload=e=>{
-    const key=boxId.replace('box-','');photos[key]=e.target.result;
-    box.querySelectorAll('i,span').forEach(el=>el.style.display='none');
-    let img=box.querySelector('img');if(!img){img=document.createElement('img');box.appendChild(img);}
-    img.src=e.target.result;
-    let btn=box.querySelector('.remove-btn');
-    if(!btn){btn=document.createElement('button');btn.className='remove-btn';btn.innerHTML='<i class="ti ti-x"></i>';btn.onclick=ev=>{ev.stopPropagation();removePhoto(boxId);};box.appendChild(btn);}
-  };reader.readAsDataURL(file);
-}
-function removePhoto(boxId){
-  const key=boxId.replace('box-','');photos[key]=null;
-  const box=document.getElementById(boxId);
-  const img=box.querySelector('img');if(img)img.remove();
-  const btn=box.querySelector('.remove-btn');if(btn)btn.remove();
-  box.querySelectorAll('i,span').forEach(el=>el.style.display='');
-  box.querySelector('input').value='';
-}
-function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.style.display='block';setTimeout(()=>t.style.display='none',2800);}
-function validate(){
-  const req=['quien','que','donde','cuando','como','accion'];let ok=true;
-  req.forEach(id=>{const el=document.getElementById(id);if(!el.value.trim()){el.style.borderColor='#e24b4a';ok=false;}else el.style.borderColor='';});
-  return ok;
-}
-function val(id){return document.getElementById(id).value.trim();}
-function guardar(){
-  if(!validate()){showToast('Completa los campos obligatorios');return;}
-  showToast('Guardando...');
-  const body={quien:val('quien'),que:val('que'),donde:val('donde'),cuando:val('cuando'),impactados:val('impactados'),estatus:val('estatus'),como:val('como'),accion:val('accion')};
-  fetch(SCRIPT_URL,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify(body)})
-    .then(r=>r.json()).then(data=>{
-      if(data.success){
-        document.getElementById('control').value=data.id;
-        document.getElementById('ok').style.display='block';
-        setTimeout(()=>document.getElementById('ok').style.display='none',3500);
-      }
-    }).catch(err=>{showToast('Error: '+err.message);});
-}
-function wrapText(doc,text,x,y,maxW,lineH){const lines=doc.splitTextToSize(text,maxW);doc.text(lines,x,y);return y+lines.length*lineH;}
-function exportarPDF(){
-  if(!validate()){showToast('Completa los campos obligatorios');return;}
-  showToast('Generando PDF...');
-  const {jsPDF}=window.jspdf;
-  const doc=new jsPDF({unit:'mm',format:'a4'});
-  const W=210,M=14,cW=W-M*2,lh=6;
-  doc.setFillColor(204,34,34);doc.rect(0,0,W,22,'F');
-  doc.setTextColor(255,255,255);doc.setFontSize(16);doc.setFont('helvetica','bold');
-  doc.text('Alerta de seguridad',M,14);
-  doc.setFontSize(11);doc.setFont('helvetica','normal');doc.text('REIS',W-M,14,{align:'right'});
-  doc.setTextColor(30,30,30);let y=32;
-  const campos=[['¿Quién?',val('quien')],['¿Qué?',val('que')],['¿Dónde?',val('donde')],['¿Cuándo?',val('cuando')],['Empleados impactados',val('impactados')||'—'],['Estatus del personal',val('estatus')||'—']];
-  campos.forEach(([label,valor])=>{
-    doc.setFillColor(245,245,245);doc.rect(M,y-4,36,8,'F');
-    doc.setFontSize(9);doc.setFont('helvetica','bold');doc.setTextColor(80,80,80);doc.text(label+':',M+1,y);
-    doc.setFont('helvetica','normal');doc.setTextColor(30,30,30);
-    const lines=doc.splitTextToSize(valor||'—',cW-38);doc.text(lines,M+38,y);
-    y+=Math.max(8,lines.length*lh);
-  });
-  y+=2;doc.setFillColor(245,245,245);doc.rect(M,y-4,cW,7,'F');
-  doc.setFontSize(9);doc.setFont('helvetica','bold');doc.setTextColor(80,80,80);doc.text('¿Cómo?',M+1,y);y+=5;
-  doc.setFont('helvetica','normal');doc.setTextColor(30,30,30);y=wrapText(doc,val('como')||'—',M,y,cW,lh)+4;
-  const fotoKeys=[['e1','e2'],['m1','m2']];
-  const fotoLabels=['Ayuda visual — Del evento','Ayuda visual — Equipo / máquina'];
-  fotoKeys.forEach((pair,idx)=>{
-    const hasAny=photos[pair[0]]||photos[pair[1]];if(!hasAny)return;
-    if(y>240){doc.addPage();y=20;}
-    doc.setFillColor(204,34,34);doc.rect(M,y-4,cW,7,'F');
-    doc.setFontSize(9);doc.setFont('helvetica','bold');doc.setTextColor(255,255,255);doc.text(fotoLabels[idx],M+2,y);y+=6;
-    let x=M;pair.forEach(key=>{if(photos[key]){try{doc.addImage(photos[key],'JPEG',x,y,45,38);}catch(e){}x+=48;}});y+=42;
-  });
-  if(y>250){doc.addPage();y=20;}
-  doc.setFillColor(245,245,245);doc.rect(M,y-4,cW,7,'F');
-  doc.setFontSize(9);doc.setFont('helvetica','bold');doc.setTextColor(80,80,80);doc.text('Acciones de contención',M+1,y);y+=5;
-  doc.setFont('helvetica','normal');doc.setTextColor(30,30,30);y=wrapText(doc,val('accion')||'—',M,y,cW,lh)+4;
-  if(y>265){doc.addPage();y=20;}
-  doc.setDrawColor(200,200,200);doc.line(M,y,W-M,y);y+=6;
-  doc.setFontSize(8);doc.setTextColor(120,120,120);
-  doc.text('Fecha de caducidad: '+(val('caducidad')||'—'),M,y);
-  doc.text('N° de control: '+(val('control')||'—'),W-M,y,{align:'right'});
-  const nombre=val('quien').replace(/\s+/g,'_')||'alerta';
-  doc.save('alerta_seguridad_'+nombre+'.pdf');
-}
-function generarIdPreview(){
-  const hoy=new Date();
-  const y=hoy.getFullYear(),m=String(hoy.getMonth()+1).padStart(2,'0'),d=String(hoy.getDate()).padStart(2,'0');
-  const h=String(hoy.getHours()).padStart(2,'0'),min=String(hoy.getMinutes()).padStart(2,'0');
-  document.getElementById('control').value=`AS-${y}/${m}/${d}-${h}:${min}-001`;
-}
-generarIdPreview();
-document.getElementById('cuando').valueAsDate=new Date();
-</script>
+    <div class="success-card" id="ok">
+      <i class="ti ti-circle-check" style="font-size:24px;display:block;margin-bottom:6px"></i>
+      ¡Alerta registrada correctamente!
+    </div>
+
+    <div class="btn-row">
+      <button class="btn-save" onclick="guardar()"><i class="ti ti-device-floppy"
+          style="vertical-align:-2px;margin-right:5px"></i>Guardar</button>
+      <button class="btn-pdf" onclick="exportarPDF()"><i class="ti ti-file-type-pdf"
+          style="vertical-align:-2px;margin-right:5px"></i>Exportar PDF</button>
+    </div>
+  </div>
+  <div class="toast" id="toast"></div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script>
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzGnmQ5fABp-LcIoSU3sKJVBv4jhwm9t7F430jpDyr_1rrur09rZgSeGgxdUObXHZRQ/exec';
+    const photos = { e1: null, e2: null, m1: null, m2: null };
+    function setEstatus(el, v, cls) { document.querySelectorAll('.est-btn').forEach(b => b.className = 'est-btn'); el.classList.add(cls); document.getElementById('estatus').value = v; }
+    function loadPhoto(input, boxId) {
+      const file = input.files[0]; if (!file) return;
+      const box = document.getElementById(boxId);
+      const reader = new FileReader();
+      reader.onload = e => {
+        const key = boxId.replace('box-', ''); photos[key] = e.target.result;
+        box.querySelectorAll('i,span').forEach(el => el.style.display = 'none');
+        let img = box.querySelector('img'); if (!img) { img = document.createElement('img'); box.appendChild(img); }
+        img.src = e.target.result;
+        let btn = box.querySelector('.remove-btn');
+        if (!btn) { btn = document.createElement('button'); btn.className = 'remove-btn'; btn.innerHTML = '<i class="ti ti-x"></i>'; btn.onclick = ev => { ev.stopPropagation(); removePhoto(boxId); }; box.appendChild(btn); }
+      }; reader.readAsDataURL(file);
+    }
+    function removePhoto(boxId) {
+      const key = boxId.replace('box-', ''); photos[key] = null;
+      const box = document.getElementById(boxId);
+      const img = box.querySelector('img'); if (img) img.remove();
+      const btn = box.querySelector('.remove-btn'); if (btn) btn.remove();
+      box.querySelectorAll('i,span').forEach(el => el.style.display = '');
+      box.querySelector('input').value = '';
+    }
+    function showToast(msg) { const t = document.getElementById('toast'); t.textContent = msg; t.style.display = 'block'; setTimeout(() => t.style.display = 'none', 2800); }
+    function validate() {
+      const req = ['quien', 'que', 'donde', 'cuando', 'como', 'accion']; let ok = true;
+      req.forEach(id => { const el = document.getElementById(id); if (!el.value.trim()) { el.style.borderColor = '#e24b4a'; ok = false; } else el.style.borderColor = ''; });
+      return ok;
+    }
+    function val(id) { return document.getElementById(id).value.trim(); }
+    function guardar() {
+      if (!validate()) { showToast('Completa los campos obligatorios'); return; }
+      showToast('Guardando...');
+      const body = { quien: val('quien'), que: val('que'), donde: val('donde'), cuando: val('cuando'), impactados: val('impactados'), estatus: val('estatus'), como: val('como'), accion: val('accion') };
+      fetch(SCRIPT_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify(body) })
+        .then(r => r.json()).then(data => {
+          if (data.success) {
+            document.getElementById('control').value = data.id;
+            document.getElementById('ok').style.display = 'block';
+            setTimeout(() => document.getElementById('ok').style.display = 'none', 3500);
+          }
+        }).catch(err => { showToast('Error: ' + err.message); });
+    }
+    function wrapText(doc, text, x, y, maxW, lineH) { const lines = doc.splitTextToSize(text, maxW); doc.text(lines, x, y); return y + lines.length * lineH; }
+    function exportarPDF() {
+      if (!validate()) { showToast('Completa los campos obligatorios'); return; }
+      showToast('Generando PDF...');
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF({ unit: 'mm', format: 'a4' });
+      const W = 210, M = 14, cW = W - M * 2, lh = 6;
+      doc.setFillColor(204, 34, 34); doc.rect(0, 0, W, 22, 'F');
+      doc.setTextColor(255, 255, 255); doc.setFontSize(16); doc.setFont('helvetica', 'bold');
+      doc.text('Alerta de seguridad', M, 14);
+      doc.setFontSize(11); doc.setFont('helvetica', 'normal'); doc.text('REIS', W - M, 14, { align: 'right' });
+      doc.setTextColor(30, 30, 30); let y = 32;
+      const campos = [['¿Quién?', val('quien')], ['¿Qué?', val('que')], ['¿Dónde?', val('donde')], ['¿Cuándo?', val('cuando')], ['Empleados impactados', val('impactados') || '—'], ['Estatus del personal', val('estatus') || '—']];
+      campos.forEach(([label, valor]) => {
+        doc.setFillColor(245, 245, 245); doc.rect(M, y - 4, 36, 8, 'F');
+        doc.setFontSize(9); doc.setFont('helvetica', 'bold'); doc.setTextColor(80, 80, 80); doc.text(label + ':', M + 1, y);
+        doc.setFont('helvetica', 'normal'); doc.setTextColor(30, 30, 30);
+        const lines = doc.splitTextToSize(valor || '—', cW - 38); doc.text(lines, M + 38, y);
+        y += Math.max(8, lines.length * lh);
+      });
+      y += 2; doc.setFillColor(245, 245, 245); doc.rect(M, y - 4, cW, 7, 'F');
+      doc.setFontSize(9); doc.setFont('helvetica', 'bold'); doc.setTextColor(80, 80, 80); doc.text('¿Cómo?', M + 1, y); y += 5;
+      doc.setFont('helvetica', 'normal'); doc.setTextColor(30, 30, 30); y = wrapText(doc, val('como') || '—', M, y, cW, lh) + 4;
+      const fotoKeys = [['e1', 'e2'], ['m1', 'm2']];
+      const fotoLabels = ['Ayuda visual — Del evento', 'Ayuda visual — Equipo / máquina'];
+      fotoKeys.forEach((pair, idx) => {
+        const hasAny = photos[pair[0]] || photos[pair[1]]; if (!hasAny) return;
+        if (y > 240) { doc.addPage(); y = 20; }
+        doc.setFillColor(204, 34, 34); doc.rect(M, y - 4, cW, 7, 'F');
+        doc.setFontSize(9); doc.setFont('helvetica', 'bold'); doc.setTextColor(255, 255, 255); doc.text(fotoLabels[idx], M + 2, y); y += 6;
+        let x = M; pair.forEach(key => { if (photos[key]) { try { doc.addImage(photos[key], 'JPEG', x, y, 45, 38); } catch (e) { } x += 48; } }); y += 42;
+      });
+      if (y > 250) { doc.addPage(); y = 20; }
+      doc.setFillColor(245, 245, 245); doc.rect(M, y - 4, cW, 7, 'F');
+      doc.setFontSize(9); doc.setFont('helvetica', 'bold'); doc.setTextColor(80, 80, 80); doc.text('Acciones de contención', M + 1, y); y += 5;
+      doc.setFont('helvetica', 'normal'); doc.setTextColor(30, 30, 30); y = wrapText(doc, val('accion') || '—', M, y, cW, lh) + 4;
+      if (y > 265) { doc.addPage(); y = 20; }
+      doc.setDrawColor(200, 200, 200); doc.line(M, y, W - M, y); y += 6;
+      doc.setFontSize(8); doc.setTextColor(120, 120, 120);
+      doc.text('Fecha de caducidad: ' + (val('caducidad') || '—'), M, y);
+      doc.text('N° de control: ' + (val('control') || '—'), W - M, y, { align: 'right' });
+      const nombre = val('quien').replace(/\s+/g, '_') || 'alerta';
+      doc.save('alerta_seguridad_' + nombre + '.pdf');
+    }
+    function generarIdPreview() {
+      const hoy = new Date();
+      const y = hoy.getFullYear(), m = String(hoy.getMonth() + 1).padStart(2, '0'), d = String(hoy.getDate()).padStart(2, '0');
+      const h = String(hoy.getHours()).padStart(2, '0'), min = String(hoy.getMinutes()).padStart(2, '0');
+      document.getElementById('control').value = `AS-${y}/${m}/${d}-${h}:${min}-001`;
+    }
+    generarIdPreview();
+    document.getElementById('cuando').valueAsDate = new Date();
+  </script>
 </body>
 </html>
